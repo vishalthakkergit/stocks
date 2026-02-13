@@ -1,0 +1,17 @@
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+
+// https://vitejs.dev/config/
+export default defineConfig(({ mode }) => {
+  // Use (process as any) to bypass TypeScript error if the Node.js type definitions are missing
+  const env = loadEnv(mode, (process as any).cwd(), '');
+  return {
+    plugins: [react()],
+    define: {
+      // Polyfill process.env for the client-side
+      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      'process.env.SUPABASE_URL': JSON.stringify(env.SUPABASE_URL),
+      'process.env.SUPABASE_ANON_KEY': JSON.stringify(env.SUPABASE_ANON_KEY),
+    },
+  };
+});
